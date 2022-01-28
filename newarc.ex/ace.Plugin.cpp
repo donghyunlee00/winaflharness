@@ -49,8 +49,7 @@ bool AcePlugin::Load(const TCHAR* lpModuleName)
 		LOAD_WITH_ALTERED_SEARCH_PATH
 	);
 	*/
-	SetDllDirectoryA("C:\\Program Files (x86)\\WinRAR\\Formats\\");
-
+	
 	m_hModule = LoadLibraryA(m_strModuleName);
 
 	if (m_hModule)
@@ -496,6 +495,7 @@ void __CreateFileList(const ArchiveItem* pItems, int nItemsNumber, int nFolderLe
 		pBuffer = (char*)realloc(pBuffer, newsize);
 
 		//memset (&extract.Files.FileList[size], 0, newsize-size-1);
+		memset(&pBuffer[size], 0, newsize - size - 1);
 
 		strcat(pBuffer, name);
 
