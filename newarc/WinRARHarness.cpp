@@ -1,4 +1,5 @@
 ﻿#include <stdio.h>
+#include "lib.part/Rtl.Base.h"
 #include "ace.class.h"
 
 AceModule* pModule;
@@ -12,15 +13,34 @@ extern "C" __declspec(dllexport) __declspec(noinline) void fuzzme(char* lpFileNa
         printf("%s\n", pArchive->m_lpFileName);
     }
 
-    pArchive->pOpenArchive(OM_LIST, NULL);
-
     ArchiveItemInfo* pItem = new ArchiveItemInfo;
     memset(pItem, 0, sizeof(ArchiveItemInfo));
-    pArchive->pGetArchiveItem(pItem);
 
-    //printf("%d\n", pItem->dwFlags);
-    //printf("%s\n", pItem->pi.FindData.cFileName);
-    //쓰레드 막힘?
+    if(pArchive->pOpenArchive(OM_LIST, NULL))
+    {
+        int nResult = pArchive->pGetArchiveItem(pItem);
+        printf("nResult: %d / %s\n", nResult, pItem->pi.FindData.cFileName);
+
+        pArchive->pCloseArchive();
+    }
+
+    if (pArchive->pOpenArchive(OM_EXTRACT, NULL))
+    {
+        char *lpCurrentPath = StrDuplicate(pItem->pi.FindData.cFileName);
+        CutToSlash(lpCurrentPath);
+
+        int bResult = pArchive->pExtract(
+            &pItem->pi,
+            1,
+            "C:\\Users\\user\\Desktop\\output_folders\\",
+            lpCurrentPath
+        );
+        printf("bResult: %d\n", bResult);
+
+        pArchive->pCloseArchive();
+    }
+
+    delete pArchive;
 }
 
 int main(int argc, char** argv)
