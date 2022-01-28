@@ -42,11 +42,16 @@ bool AcePlugin::Load(const TCHAR* lpModuleName)
 {
 	m_strModuleName = lpModuleName;
 
+	/*
 	m_hModule = LoadLibraryEx(
 		m_strModuleName,
 		NULL,
 		LOAD_WITH_ALTERED_SEARCH_PATH
 	);
+	*/
+	SetDllDirectoryA("C:\\Program Files (x86)\\WinRAR\\Formats\\");
+
+	m_hModule = LoadLibraryA(m_strModuleName);
 
 	if (m_hModule)
 	{
