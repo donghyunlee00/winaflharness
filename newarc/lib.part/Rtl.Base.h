@@ -49,7 +49,7 @@
 
 #include "Rtl.Types.h"
 #ifdef __GNUC__
-#include <Rtl.Memory.h>
+#include "Rtl.Memory.h"
 #endif
 #include "Rtl.Strings.h"
 #include "Rtl.Kernel.h"

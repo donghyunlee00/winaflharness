@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include "lib.part/Rtl.Base.h"
 #include "lib.part/FarPluginBase.hpp"
 #include "Ace.class.h"
@@ -7,6 +8,7 @@ MY_DEFINE_GUID(CLSID_FormatACE, 0x08183761, 0x87D3, 0x4C85, 0xBF, 0xB7, 0x7C, 0x
 
 AceModule::AceModule()
 {
+	/*
 	char* lpModuleName = StrDuplicate(Info.ModuleName, 260);
 
 	CutToSlash(lpModuleName);
@@ -53,6 +55,22 @@ AceModule::AceModule()
 	}
 
 	StrFree(lpModuleName);
+	*/
+
+	m_hModule = LoadLibraryA("UNACEV2.DLL");
+
+	if (m_hModule)
+	{
+		m_pfnInitDll = (ACEINITDLL)GetProcAddress(m_hModule, "ACEInitDll");
+		m_pfnReadArchiveData = (ACEREADARCHIVEDATA)GetProcAddress(m_hModule, "ACEReadArchiveData");
+		m_pfnList = (ACELIST)GetProcAddress(m_hModule, "ACEList");
+		m_pfnTest = (ACETEST)GetProcAddress(m_hModule, "ACETest");
+		m_pfnExtract = (ACEEXTRACT)GetProcAddress(m_hModule, "ACEExtract");
+	}
+	else
+	{
+		printf("Failed to load UNACEV2.DLL\n");
+	}
 }
 
 void AceModule::GetArchiveFormatInfo(ArchiveFormatInfo* pInfo)
