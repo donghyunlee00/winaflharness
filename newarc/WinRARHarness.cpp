@@ -1,18 +1,26 @@
 ﻿#include <stdio.h>
-#include "Ace.class.h"
+#include "ace.class.h"
 
 AceModule* pModule;
 
 extern "C" __declspec(dllexport) __declspec(noinline) void fuzzme(char* lpFileName)
 {
-    // printf("%s\n", lpFileName);
-
     AceArchive* pArchive = new AceArchive(pModule, lpFileName, false);
 
     if (pArchive && pArchive->IsArchive())
     {
-        printf("NAERROR_SUCCESS\n");
+        printf("%s\n", pArchive->m_lpFileName);
     }
+
+    pArchive->pOpenArchive(OM_LIST, NULL);
+
+    ArchiveItemInfo* pItem = new ArchiveItemInfo;
+    memset(pItem, 0, sizeof(ArchiveItemInfo));
+    pArchive->pGetArchiveItem(pItem);
+
+    //printf("%d\n", pItem->dwFlags);
+    //printf("%s\n", pItem->pi.FindData.cFileName);
+    //쓰레드 막힘?
 }
 
 int main(int argc, char** argv)
