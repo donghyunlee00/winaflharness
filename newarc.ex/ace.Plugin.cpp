@@ -274,8 +274,8 @@ int __stdcall AcePlugin::AceListThread(void* pParam)
 									  //  if FileList specifies TEST.DAT)
 	pHandle->pPlugin->m_pfnList(pHandle->lpFileName, &List);
 
-	StrFree((void*)pHandle->lpFileName);
-	delete pHandle;
+	//StrFree((void*)pHandle->lpFileName);
+	//delete pHandle;
 
 	ExitThread(0);
 }
